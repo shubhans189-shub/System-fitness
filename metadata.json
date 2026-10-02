@@ -1,0 +1,6 @@
+{
+  "name": "Solo Leveling: System Fitness",
+  "description": "Solo Leveling inspired hunter level-up system with daily physical quest tracking, nutrition and water calculation, AI coaching, analytical progression charts, and offline PWA access.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

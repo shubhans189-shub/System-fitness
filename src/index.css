@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --system-blue: #00e5ff;
+    --system-deep: #0051ff;
+    --system-purple: #7928ca;
+    --system-red: #ff0055;
+    --system-dark: #050814;
+    --system-card: #0b1124;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #050814;
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-system {
+    font-family: 'Orbitron', 'Rajdhani', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .font-tech {
+    font-family: 'Rajdhani', sans-serif;
+  }
+}
+
+/* Dynamic Rank Theme Accents & Auras */
+.rank-theme-e-rank {
+  --rank-accent: #22c55e;
+  --rank-glow: rgba(34, 197, 94, 0.35);
+  --rank-surface: rgba(6, 28, 16, 0.95);
+}
+
+.rank-theme-d-rank {
+  --rank-accent: #06b6d4;
+  --rank-glow: rgba(6, 182, 212, 0.35);
+  --rank-surface: rgba(5, 20, 32, 0.95);
+}
+
+.rank-theme-c-rank {
+  --rank-accent: #3b82f6;
+  --rank-glow: rgba(59, 130, 246, 0.35);
+  --rank-surface: rgba(7, 16, 38, 0.95);
+}
+
+.rank-theme-b-rank {
+  --rank-accent: #6366f1;
+  --rank-glow: rgba(99, 102, 241, 0.35);
+  --rank-surface: rgba(14, 13, 38, 0.95);
+}
+
+.rank-theme-a-rank {
+  --rank-accent: #a855f7;
+  --rank-glow: rgba(168, 85, 247, 0.4);
+  --rank-surface: rgba(22, 10, 38, 0.95);
+}
+
+.rank-theme-s-rank {
+  --rank-accent: #eab308;
+  --rank-glow: rgba(234, 179, 8, 0.45);
+  --rank-surface: rgba(32, 22, 5, 0.95);
+}
+
+.rank-theme-national-level {
+  --rank-accent: #f97316;
+  --rank-glow: rgba(249, 115, 22, 0.45);
+  --rank-surface: rgba(38, 12, 5, 0.95);
+}
+
+.rank-theme-shadow-monarch {
+  --rank-accent: #c084fc;
+  --rank-glow: rgba(192, 132, 252, 0.5);
+  --rank-surface: rgba(18, 7, 36, 0.95);
+}
+
+.rank-border {
+  border-color: var(--rank-accent, #00e5ff) !important;
+}
+
+.rank-glow-box {
+  box-shadow: 0 0 30px var(--rank-glow, rgba(0, 229, 255, 0.25)) !important;
+}
+
+.rank-text {
+  color: var(--rank-accent, #00e5ff) !important;
+}
+
+/* Solo Leveling Hologram & Glow Utilities */
+.system-window {
+  background: linear-gradient(135deg, rgba(11, 19, 43, 0.94) 0%, rgba(6, 11, 25, 0.97) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.12), inset 0 0 15px rgba(0, 112, 243, 0.08);
+  backdrop-filter: blur(12px);
+  position: relative;
+}
+
+.system-window::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--rank-accent, #00e5ff), transparent);
+}
+
+.system-window-danger {
+  background: linear-gradient(135deg, rgba(30, 8, 16, 0.95) 0%, rgba(15, 3, 7, 0.98) 100%);
+  border: 1px solid rgba(255, 0, 85, 0.5);
+  box-shadow: 0 0 30px rgba(255, 0, 85, 0.25), inset 0 0 20px rgba(255, 0, 85, 0.15);
+}
+
+.glow-text-cyan {
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.6), 0 0 20px rgba(0, 229, 255, 0.3);
+}
+
+.glow-text-red {
+  text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4);
+}
+
+.glow-box-cyan {
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060b19;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
+}
+
+/* PDF Print Styles */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .system-window {
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+  }
+}
