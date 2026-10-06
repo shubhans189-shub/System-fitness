@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
-import { Download, Smartphone, Check, X, Copy, ExternalLink, HelpCircle, Compass, QrCode, Sparkles, Github } from 'lucide-react';
+import { Download, Smartphone, Check, X, Copy, ExternalLink, HelpCircle, Compass, QrCode, Sparkles, Github, RefreshCw } from 'lucide-react';
 
 interface PWAInstallBannerProps {
   forceOpenGuide?: boolean;
@@ -11,7 +11,7 @@ export const PWAInstallBanner: React.FC<PWAInstallBannerProps> = ({
   forceOpenGuide,
   onCloseGuide,
 }) => {
-  const { isInstallable, isInstalled, isIOS, isAndroid, install } = usePWAInstall();
+  const { isInstallable, isInstalled, isIOS, isAndroid, needRefresh, install, forceRefreshApp } = usePWAInstall();
   const [dismissed, setDismissed] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -48,6 +48,23 @@ export const PWAInstallBanner: React.FC<PWAInstallBannerProps> = ({
 
   return (
     <>
+      {needRefresh && (
+        <div className="w-full bg-gradient-to-r from-emerald-950 via-cyan-950 to-blue-950 border-b border-cyan-400 px-3 sm:px-4 py-2.5 text-xs text-white flex items-center justify-between shadow-[0_0_25px_rgba(0,229,255,0.4)] z-50 animate-pulse">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
+            <span className="font-system font-bold text-cyan-300">[SYSTEM UPDATE READY]:</span>
+            <span className="text-slate-200">New leveling interface & features are available.</span>
+          </div>
+          <button
+            onClick={forceRefreshApp}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-system font-black text-xs transition shadow-[0_0_12px_rgba(0,229,255,0.5)] active:scale-95"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>RELOAD NOW</span>
+          </button>
+        </div>
+      )}
+
       {!isInstalled && !dismissed && (
         <div
           id="pwa-install-banner"
@@ -416,7 +433,16 @@ export const PWAInstallBanner: React.FC<PWAInstallBannerProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-3 sm:p-4 border-t border-cyan-500/20 bg-slate-950 flex justify-end shrink-0">
+            <div className="p-3 sm:p-4 border-t border-cyan-500/20 bg-slate-950 flex items-center justify-between gap-2 shrink-0">
+              <button
+                onClick={forceRefreshApp}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 text-xs font-system font-bold transition active:scale-95"
+                title="Force clear old cache and reload latest updates"
+              >
+                <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Force Refresh Stale Cache</span>
+              </button>
+
               <button
                 onClick={closeGuide}
                 className="px-5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 font-system font-bold text-xs transition"

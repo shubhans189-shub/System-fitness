@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { registerSW } from 'virtual:pwa-register';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -10,6 +11,31 @@ export function usePWAInstall() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isAndroid, setIsAndroid] = useState(false);
+  const [needRefresh, setNeedRefresh] = useState(false);
+
+  useEffect(() => {
+    // Register PWA service worker with auto-update
+    try {
+      const updateSW = registerSW({
+        immediate: true,
+        onNeedRefresh() {
+          setNeedRefresh(true);
+        },
+        onOfflineReady() {
+          console.log('[SYSTEM] Service Worker active & ready for offline execution.');
+        },
+      });
+
+      // Periodically check for updates every 60 seconds
+      const interval = setInterval(() => {
+        updateSW(true);
+      }, 60 * 1000);
+
+      return () => clearInterval(interval);
+    } catch (err) {
+      console.warn('[SYSTEM] SW registration note:', err);
+    }
+  }, []);
 
   useEffect(() => {
     // Detect standalone mode (already installed)
@@ -56,11 +82,34 @@ export function usePWAInstall() {
     return false;
   };
 
+  const forceRefreshApp = async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.update();
+          await reg.unregister();
+        }
+      }
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        for (const key of keys) {
+          await caches.delete(key);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    window.location.reload();
+  };
+
   return {
     isInstallable: !!deferredPrompt,
     isInstalled,
     isIOS,
     isAndroid,
+    needRefresh,
     install,
+    forceRefreshApp,
   };
 }
