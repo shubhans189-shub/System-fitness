@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
-import { Download, Smartphone, Check, X, Copy, ExternalLink, HelpCircle, Compass, QrCode, Sparkles } from 'lucide-react';
+import { Download, Smartphone, Check, X, Copy, ExternalLink, HelpCircle, Compass, QrCode, Sparkles, Github } from 'lucide-react';
 
 interface PWAInstallBannerProps {
   forceOpenGuide?: boolean;
@@ -15,7 +15,7 @@ export const PWAInstallBanner: React.FC<PWAInstallBannerProps> = ({
   const [dismissed, setDismissed] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [activeGuideTab, setActiveGuideTab] = useState<'android' | 'ios' | 'qrcode' | 'troubleshoot'>('android');
+  const [activeGuideTab, setActiveGuideTab] = useState<'android' | 'ios' | 'github' | 'qrcode' | 'troubleshoot'>('android');
 
   const isGuideOpen = forceOpenGuide || showGuide;
 
@@ -154,6 +154,18 @@ export const PWAInstallBanner: React.FC<PWAInstallBannerProps> = ({
               </button>
 
               <button
+                onClick={() => setActiveGuideTab('github')}
+                className={`flex-1 py-2 px-2 rounded-lg font-system text-xs font-bold transition flex items-center justify-center gap-1.5 whitespace-nowrap ${
+                  activeGuideTab === 'github'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(0,229,255,0.2)]'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Github className="w-3.5 h-3.5 text-cyan-400" />
+                <span>GitHub Way</span>
+              </button>
+
+              <button
                 onClick={() => setActiveGuideTab('qrcode')}
                 className={`flex-1 py-2 px-2 rounded-lg font-system text-xs font-bold transition flex items-center justify-center gap-1.5 whitespace-nowrap ${
                   activeGuideTab === 'qrcode'
@@ -269,6 +281,69 @@ export const PWAInstallBanner: React.FC<PWAInstallBannerProps> = ({
                         <span>Scroll down the sheet and tap <strong>"Add to Home Screen"</strong>.</span>
                       </div>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tab: The GitHub Method (Export -> Vercel / Phone) */}
+              {activeGuideTab === 'github' && (
+                <div className="space-y-4">
+                  <div className="bg-slate-900/90 p-3.5 rounded-xl border border-cyan-500/30 space-y-3">
+                    <h4 className="font-system font-bold text-cyan-300 text-sm flex items-center gap-1.5">
+                      <Github className="w-4 h-4 text-cyan-400" />
+                      <span>The GitHub ➔ Phone Deployment Method</span>
+                    </h4>
+                    
+                    <p className="text-slate-300 text-xs">
+                      Follow these 3 simple steps to export your app to GitHub and get your permanent personal link on your phone:
+                    </p>
+
+                    <div className="space-y-3 text-slate-300 text-xs">
+                      <div className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/70 border border-slate-800">
+                        <span className="w-5 h-5 rounded-full bg-cyan-500/30 text-cyan-300 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                          1
+                        </span>
+                        <div>
+                          <strong className="text-white block font-system">Step 1: Export to GitHub in AI Studio</strong>
+                          <span>
+                            At the top right of this Google AI Studio screen, click the <strong>"Export"</strong> or <strong>"GitHub"</strong> button. Authorize your GitHub account (<code>shubhans189</code>) and confirm. It creates your repo in seconds!
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/70 border border-slate-800">
+                        <span className="w-5 h-5 rounded-full bg-cyan-500/30 text-cyan-300 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                          2
+                        </span>
+                        <div>
+                          <strong className="text-white block font-system">Step 2: Connect to Vercel (100% Free & 1-Click)</strong>
+                          <span>
+                            Go to <strong className="text-cyan-300">vercel.com</strong> (or log in with GitHub) ➔ Click <strong>"Add New" ➔ "Project"</strong> ➔ Select your exported repository ➔ Click <strong>"Deploy"</strong>. Within 60s, Vercel gives you a permanent link (e.g. <code>https://solo-leveling.vercel.app</code>) that never expires!
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/70 border border-slate-800">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/30 text-emerald-300 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                          3
+                        </span>
+                        <div>
+                          <strong className="text-white block font-system">Step 3: Open on Phone & Install App</strong>
+                          <span>
+                            Open your Vercel link in Chrome on your phone ➔ Tap 3 dots (⋮) ➔ Tap <strong>"Install app"</strong> / <strong>"Add to Home screen"</strong>. The app installs directly with the custom Sung Jin-woo icon!
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900/90 p-3.5 rounded-xl border border-slate-700/80 space-y-2">
+                    <h4 className="font-system font-bold text-slate-200 text-xs">
+                      Alternative: Download ZIP Directly on Phone
+                    </h4>
+                    <p className="text-slate-400 text-xs leading-relaxed">
+                      You can also visit <code>github.com/shubhans189/&lt;repo&gt;</code> directly in Chrome on your phone ➔ tap the green <strong>"Code"</strong> button ➔ tap <strong>"Download ZIP"</strong> to save the complete source code directly on your phone!
+                    </p>
                   </div>
                 </div>
               )}
