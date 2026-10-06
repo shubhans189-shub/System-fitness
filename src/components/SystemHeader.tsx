@@ -1,7 +1,7 @@
 import React from 'react';
 import { HunterStats, UserProfile } from '../types';
 import jinwooPortraitImg from '../assets/images/jinwoo_portrait_1789901630204.jpg';
-import { Bot, Volume2, VolumeX, Bell, BellOff, Download, FileText, Settings, Sparkles, Crown, Moon, Wifi, WifiOff } from 'lucide-react';
+import { Bot, Volume2, VolumeX, Bell, BellOff, Download, FileText, Settings, Sparkles, Crown, Moon, Wifi, WifiOff, Home } from 'lucide-react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
 import { getRankTheme } from '../utils/rankTheme';
 
@@ -9,6 +9,8 @@ interface SystemHeaderProps {
   userProfile: UserProfile;
   stats: HunterStats;
   isOfflineMode: boolean;
+  activeTab?: 'home' | 'quests' | 'nutrition' | 'analytics';
+  onGoHome?: () => void;
   onToggleOfflineMode: () => void;
   onOpenAiCoach: () => void;
   onOpenExport: () => void;
@@ -24,6 +26,8 @@ export const SystemHeader: React.FC<SystemHeaderProps> = ({
   userProfile,
   stats,
   isOfflineMode,
+  activeTab = 'home',
+  onGoHome,
   onToggleOfflineMode,
   onOpenAiCoach,
   onOpenExport,
@@ -48,7 +52,11 @@ export const SystemHeader: React.FC<SystemHeaderProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-4">
           
           {/* Left: Player Identity, Sung Jin-woo Avatar & Rank */}
-          <div className="flex items-center gap-2.5">
+          <div
+            onClick={onGoHome}
+            className={`flex items-center gap-2.5 ${onGoHome ? 'cursor-pointer hover:opacity-90 transition' : ''}`}
+            title={onGoHome ? 'Click to go to Home Landing Page' : undefined}
+          >
             {/* Sung Jin-woo Shadow Monarch Avatar */}
             <div
               className="relative w-10 h-10 rounded-xl overflow-hidden border shadow-md shrink-0"
@@ -131,6 +139,18 @@ export const SystemHeader: React.FC<SystemHeaderProps> = ({
 
           {/* Right: Quick Action Controls & Offline/Online Toggle */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Return to Home Landing Page Button */}
+            {onGoHome && activeTab !== 'home' && (
+              <button
+                onClick={onGoHome}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-cyan-950/70 hover:bg-cyan-900/90 border border-cyan-500/50 text-cyan-300 text-xs font-semibold font-system transition active:scale-95 shadow-[0_0_10px_rgba(0,229,255,0.2)]"
+                title="Return to Home Landing Page"
+              >
+                <Home className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden sm:inline">Home</span>
+              </button>
+            )}
+
             {/* System Online / Offline Mode Toggle */}
             <button
               onClick={onToggleOfflineMode}

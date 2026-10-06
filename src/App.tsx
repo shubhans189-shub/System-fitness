@@ -701,6 +701,8 @@ export default function App() {
         userProfile={activeProfile}
         stats={hunterStats}
         isOfflineMode={isOfflineMode}
+        activeTab={activeTab}
+        onGoHome={() => setActiveTab('home')}
         onToggleOfflineMode={handleToggleOfflineMode}
         onOpenAiCoach={() => setShowAiCoach(true)}
         onOpenExport={() => setShowExport(true)}
@@ -726,89 +728,7 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6">
         
-        {/* Navigation Tabs Bar */}
-        <div className="flex items-center justify-between gap-2 border-b border-cyan-500/20 pb-3">
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Tab 0: Home Portal */}
-            <button
-              id="nav-tab-home"
-              onClick={() => {
-                playRepCountSound(activeProfile.soundEnabled);
-                setActiveTab('home');
-              }}
-              className={`flex items-center gap-2 px-3 sm:px-5 py-2 rounded-xl font-system text-xs sm:text-sm font-bold transition-all ${
-                activeTab === 'home'
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.25)]'
-                  : 'bg-slate-950/60 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-700'
-              }`}
-            >
-              <Home className="w-4 h-4" />
-              <span>HOME</span>
-            </button>
-
-            {/* Tab 1: Quests & Status */}
-            <button
-              id="nav-tab-quests"
-              onClick={() => {
-                playRepCountSound(activeProfile.soundEnabled);
-                setActiveTab('quests');
-              }}
-              className={`flex items-center gap-2 px-3 sm:px-5 py-2 rounded-xl font-system text-xs sm:text-sm font-bold transition-all ${
-                activeTab === 'quests'
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.25)]'
-                  : 'bg-slate-950/60 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-700'
-              }`}
-            >
-              <Dumbbell className="w-4 h-4" />
-              <span>STATUS & QUESTS</span>
-            </button>
-
-            {/* Tab 2: Nutrition & Hydration */}
-            <button
-              id="nav-tab-nutrition"
-              onClick={() => {
-                playRepCountSound(activeProfile.soundEnabled);
-                setActiveTab('nutrition');
-              }}
-              className={`flex items-center gap-2 px-3 sm:px-5 py-2 rounded-xl font-system text-xs sm:text-sm font-bold transition-all ${
-                activeTab === 'nutrition'
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.25)]'
-                  : 'bg-slate-950/60 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-700'
-              }`}
-            >
-              <Utensils className="w-4 h-4" />
-              <span>NUTRITION & WATER</span>
-            </button>
-
-            {/* Tab 3: Progression Analytics */}
-            <button
-              id="nav-tab-analytics"
-              onClick={() => {
-                playRepCountSound(activeProfile.soundEnabled);
-                setActiveTab('analytics');
-              }}
-              className={`flex items-center gap-2 px-3 sm:px-5 py-2 rounded-xl font-system text-xs sm:text-sm font-bold transition-all ${
-                activeTab === 'analytics'
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.25)]'
-                  : 'bg-slate-950/60 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-700'
-              }`}
-            >
-              <TrendingUp className="w-4 h-4" />
-              <span>ANALYTICS</span>
-            </button>
-          </div>
-
-          {/* Quick AI Coach Trigger */}
-          <button
-            onClick={() => setShowAiCoach(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/40 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 text-xs font-system font-bold transition active:scale-95"
-          >
-            <Bot className="w-4 h-4 text-cyan-400" />
-            <span className="hidden md:inline">AI Advice</span>
-          </button>
-        </div>
-
-        {/* Tab 0 Content: Open Home Portal */}
+        {/* VIEW 0: Standalone Dedicated Home Page (ONLY the Homepage, no tabs clutter) */}
         {activeTab === 'home' && (
           <HomePage
             userProfile={activeProfile}
@@ -817,6 +737,7 @@ export default function App() {
             dailyCheckIn={dailyCheckIn}
             waterToday={waterToday}
             loggedMeals={loggedMeals}
+            onStart={() => setActiveTab('quests')}
             onNavigateToStatus={() => setActiveTab('quests')}
             onNavigateToNutrition={() => setActiveTab('nutrition')}
             onNavigateToAnalytics={() => setActiveTab('analytics')}
@@ -825,6 +746,89 @@ export default function App() {
             onOpenMilestones={() => setShowMilestones(true)}
             onOpenInstallGuide={() => setShowInstallGuide(true)}
           />
+        )}
+
+        {/* When inside the app (activeTab !== 'home'): Show the clean 3-tab navigation bar with full visibility for all buttons including ANALYTICS */}
+        {activeTab !== 'home' && (
+          <div className="space-y-4">
+            {/* Top Return to Home & Quick Coach bar */}
+            <div className="flex items-center justify-between gap-2 border-b border-cyan-500/20 pb-3">
+              <button
+                id="back-to-home-btn"
+                onClick={() => {
+                  playRepCountSound(activeProfile.soundEnabled);
+                  setActiveTab('home');
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 text-xs font-system font-bold transition active:scale-95 shadow-sm"
+                title="Return to Home Landing Page"
+              >
+                <Home className="w-3.5 h-3.5 text-cyan-400" />
+                <span>← Home Page</span>
+              </button>
+
+              <button
+                onClick={() => setShowAiCoach(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/40 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 text-xs font-system font-bold transition active:scale-95"
+              >
+                <Bot className="w-4 h-4 text-cyan-400" />
+                <span>AI Coach</span>
+              </button>
+            </div>
+
+            {/* Exactly the 3 Core Tabs evenly distributed via grid-cols-3 (100% width, never pushed to corner) */}
+            <div className="w-full grid grid-cols-3 gap-1.5 sm:gap-3 p-1 rounded-2xl bg-slate-950/90 border border-cyan-500/30 shadow-[0_0_20px_rgba(0,229,255,0.15)]">
+              {/* Tab 1: STATUS & QUESTS */}
+              <button
+                id="nav-tab-quests"
+                onClick={() => {
+                  playRepCountSound(activeProfile.soundEnabled);
+                  setActiveTab('quests');
+                }}
+                className={`flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-4 py-2.5 rounded-xl font-system text-[11px] sm:text-xs md:text-sm font-bold transition-all w-full text-center ${
+                  activeTab === 'quests'
+                    ? 'bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(0,229,255,0.4)]'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+                }`}
+              >
+                <Dumbbell className="w-4 h-4 shrink-0" />
+                <span className="truncate">STATUS & QUESTS</span>
+              </button>
+
+              {/* Tab 2: NUTRITION & WATER */}
+              <button
+                id="nav-tab-nutrition"
+                onClick={() => {
+                  playRepCountSound(activeProfile.soundEnabled);
+                  setActiveTab('nutrition');
+                }}
+                className={`flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-4 py-2.5 rounded-xl font-system text-[11px] sm:text-xs md:text-sm font-bold transition-all w-full text-center ${
+                  activeTab === 'nutrition'
+                    ? 'bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(0,229,255,0.4)]'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+                }`}
+              >
+                <Utensils className="w-4 h-4 shrink-0" />
+                <span className="truncate">NUTRITION & WATER</span>
+              </button>
+
+              {/* Tab 3: ANALYTICS (100% visible, fully clear, prominent!) */}
+              <button
+                id="nav-tab-analytics"
+                onClick={() => {
+                  playRepCountSound(activeProfile.soundEnabled);
+                  setActiveTab('analytics');
+                }}
+                className={`flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-4 py-2.5 rounded-xl font-system text-[11px] sm:text-xs md:text-sm font-bold transition-all w-full text-center ${
+                  activeTab === 'analytics'
+                    ? 'bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(0,229,255,0.4)]'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+                }`}
+              >
+                <TrendingUp className="w-4 h-4 shrink-0" />
+                <span className="truncate">ANALYTICS</span>
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Tab 1 Content: Status Window & Daily Physical Quest */}

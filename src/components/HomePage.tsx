@@ -18,6 +18,7 @@ import {
   Quote,
   RefreshCw,
   Award,
+  Play,
 } from 'lucide-react';
 import jinwooPortraitImg from '../assets/images/jinwoo_portrait_1789901630204.jpg';
 import jinwooMonarchImg from '../assets/images/jinwoo_monarch_1789901648447.jpg';
@@ -31,6 +32,7 @@ interface HomePageProps {
   dailyCheckIn?: DailyCheckIn | null;
   waterToday: number;
   loggedMeals: MealLogEntry[];
+  onStart?: () => void;
   onNavigateToStatus: () => void;
   onNavigateToNutrition: () => void;
   onNavigateToAnalytics: () => void;
@@ -47,6 +49,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   dailyCheckIn,
   waterToday,
   loggedMeals,
+  onStart,
   onNavigateToStatus,
   onNavigateToNutrition,
   onNavigateToAnalytics,
@@ -57,6 +60,8 @@ export const HomePage: React.FC<HomePageProps> = ({
 }) => {
   const theme = getRankTheme(stats.rank);
   const activeTitle = stats.equippedTitle || stats.title;
+
+  const handleStart = onStart || onNavigateToStatus;
 
   const [quote, setQuote] = React.useState(SYSTEM_QUOTES[0]);
 
@@ -148,11 +153,13 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             {/* Direct Enter Current Status Button */}
             <button
-              onClick={onNavigateToStatus}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-system font-black text-sm tracking-wider uppercase transition shadow-[0_0_25px_rgba(0,229,255,0.5)] active:scale-95 group/btn shrink-0"
+              id="home-hero-start-btn"
+              onClick={handleStart}
+              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-system font-black text-sm sm:text-base tracking-wider uppercase transition shadow-[0_0_30px_rgba(0,229,255,0.6)] active:scale-95 group/btn shrink-0"
             >
-              <span>ENTER STATUS & DAILY QUESTS</span>
-              <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+              <Play className="w-4 h-4 fill-slate-950" />
+              <span>START // ENTER SYSTEM</span>
+              <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
@@ -173,6 +180,32 @@ export const HomePage: React.FC<HomePageProps> = ({
             <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
+      </div>
+
+      {/* 2. Primary Launch Protocol Strip */}
+      <div className="w-full p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-cyan-950/70 via-slate-950 to-blue-950/70 border border-cyan-500/50 shadow-[0_0_30px_rgba(0,229,255,0.18)] flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="space-y-1 text-center md:text-left">
+          <div className="flex items-center justify-center md:justify-start gap-2 text-xs font-system font-bold text-cyan-300 uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+            <span>THE SYSTEM IS ARMED & READY</span>
+          </div>
+          <h2 className="text-lg sm:text-xl font-black font-system text-white tracking-wide">
+            ENTER YOUR TRAINING WORKSPACE
+          </h2>
+          <p className="text-xs text-slate-400">
+            Tap START to access the 3 hunter pillars: <strong>Status & Quests</strong>, <strong>Nutrition & Water</strong>, and <strong>Analytics</strong>.
+          </p>
+        </div>
+
+        <button
+          id="home-main-launch-btn"
+          onClick={handleStart}
+          className="w-full md:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-system font-black text-sm sm:text-base tracking-widest uppercase transition-all shadow-[0_0_25px_rgba(0,229,255,0.5)] active:scale-95 flex items-center justify-center gap-2 group/launch shrink-0"
+        >
+          <Play className="w-4 h-4 fill-slate-950" />
+          <span>START NOW</span>
+          <ChevronRight className="w-4 h-4 group-hover/launch:translate-x-1 transition-transform" />
+        </button>
       </div>
 
       {/* 2. Interactive Sector Portal Cards Grid */}
